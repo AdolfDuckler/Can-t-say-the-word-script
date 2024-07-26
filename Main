@@ -1,0 +1,128 @@
+-- Create the GUI
+local guiService = game:GetService("GuiService")
+local playerGui = game.Players.LocalPlayer.PlayerGui
+local gui = guiService:CreateGui({
+Parent = playerGui,
+ResetOnSpawn = false
+})
+
+-- Create the main Frame (background)
+local mainFrame = gui:CreateFrame({
+BackgroundColor3 = Color3.new(1, 1, 1), -- White background
+BorderColor3 = Color3.new(0, 0, 0),
+BorderSizePixel = 2,
+Size = UDim2.new(0, 550, 0, 280), -- X = 550, Y = 280
+Position = UDim2.new(0, 0, 0, 50), -- Leave 50 pixels at the top
+Draggable = true -- Make the UI draggable
+})
+
+-- Create the X button to close the UI
+local closeButton = mainFrame:CreateImageButton({
+Image = "http://www.roblox.com/asset/?id=4640111238", -- Default Roblox close button image
+Size = UDim2.new(0, 24, 0, 24),
+Position = UDim2.new(1, -24, 0, 4), -- Top-right corner
+AnchorPoint = Vector2.new(1, 0)
+})
+
+-- Create the touch event handler for the close button
+local function onCloseTouch(touch)
+if touch.State == Enum.TouchState.End then
+gui:Destroy() -- Destroy the UI when the close button is touched
+end
+end
+
+local userInputService = game:GetService("UserInputService")
+userInputService.InputChanged:Connect(function(input)
+if input.UserInputType == Enum.UserInputType.Touch then
+local touch = input
+if closeButton:IsA("GuiObject") and closeButton:IsDescendantOf(mainFrame) then
+local pos = touch.Position
+local bounds = closeButton.AbsoluteBounds
+if pos.X >= bounds.X and pos.X <= bounds.X + bounds.Width and pos.Y >= bounds.Y and pos.Y <= bounds.Y + bounds.Height then
+onCloseTouch(touch)
+end
+end
+end
+end)
+
+-- Create the 2x2 button grid
+local buttonGrid = {}
+
+for i = 1, 4 do
+local button = mainFrame:CreateTextButton({
+Text = "", -- Button text will be set later
+Font = Enum.Font.SourceSans,
+FontSize = Enum.FontSize.Size24,
+TextColor3 = Color3.new(0, 0, 0),
+BackgroundColor3 = Color3.new(1, 1, 1),
+BorderColor3 = Color3.new(0, 0, 0),
+BorderSizePixel = 2,
+Size = UDim2.new(0, 130, 0, 60), -- Button size
+Position = UDim2.new(0, (i % 2) * 135, 0, math.floor((i - 1) / 2) * 65 + 50) -- Position buttons in a 2x2 grid
+})
+
+-- Set button text
+if i == 1 then
+button.Text = "1. Give Points"
+elseif i == 2 then
+button.Text = "2. Destroy Stairs"
+elseif i == 3 then
+button.Text = "3. Destroy Checker"
+elseif i == 4 then
+button.Text = "4. Text bypass"
+end
+
+table.insert(buttonGrid, button) -- Add button to the grid
+end
+
+-- Create the event handler for each button
+if i == 1 then
+local function onGivePointsClick(touch)
+if touch.State == Enum.TouchState.End then
+loadstring(game:HttpGet("https://raw.githubusercontent.com/AdolfDuckler/Can-t-say-the-word-script/main/CSTW%201K%20Points"))()
+end
+end
+elseif i == 2 then
+local function onDestroyStairsClick(touch)
+if touch.State == Enum.TouchState.End then
+loadstring(game:HttpGet("https://raw.githubusercontent.com/AdolfDuckler/Can-t-say-the-word-script/main/Destroy%20Stairs"))()
+end
+end
+elseif i == 3 then
+local function onDestroyCheckersClick(touch)
+if touch.State == Enum.TouchState.End then
+loadstring(game:HttpGet("https://raw.githubusercontent.com/AdolfDuckler/Can-t-say-the-word-script/main/Destroy%20Checkers"))()
+end
+end
+elseif i == 4 then
+local function onWordBypassClick(touch)
+if touch.State == Enum.TouchState.End then
+loadstring(game:HttpGet("https://raw.githubusercontent.com/AdolfDuckler/Can-t-say-the-word-script/main/Word%20Bypass"))()
+end
+end
+end
+
+-- Connect the event handler to the button
+userInputService.InputChanged:Connect(function(input)
+if input.UserInputType == Enum.UserInputType.Touch then
+local touch = input
+if button:IsA("GuiObject") and button:IsDescendantOf(mainFrame) then
+local pos = touch.Position
+local bounds = button.AbsoluteBounds
+if pos.X >= bounds.X and pos.X <= bounds.X + bounds.Width and pos.Y >= bounds.Y and pos.Y <= bounds.Y + bounds.Height then
+if i == 1 then
+onGivePointsClick(touch)
+elseif i == 2 then
+onDestroyStairsClick(touch)
+elseif i == 3 then
+onDestroyCheckersClick(touch)
+elseif i == 4 then
+onWordBypassClick(touch)
+end
+end
+end
+end
+end)
+
+table.insert(buttonGrid, button) -- Add button to the grid
+end
