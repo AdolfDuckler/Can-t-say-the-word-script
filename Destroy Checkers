@@ -1,14 +1,3 @@
-local function JXBX_fake_script() -- Frame.LocalScript 
-	local script = Instance.new('LocalScript', Frame)
-
-	script.Parent.Active = true
-	script.Parent.Draggable = true
-	script.Parent.TextButton.Activated:Connect(function()
-		game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(script.Parent.TextBox.Text, "All")
-	end)
-end
-coroutine.wrap(JXBX_fake_script)()
-
 local steps = {}
 local lp = game.Players.LocalPlayer
 local function getroot()
